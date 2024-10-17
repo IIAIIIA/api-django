@@ -15,14 +15,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
 
 from api.views import CollectionViewSet, LinkViewSet
 
 router = DefaultRouter()
-router.register(r'collecton', CollectionViewSet)
-router.register(r'link', LinkViewSet)
+router.register(r'collecton', CollectionViewSet, basename='collecton')
+router.register(r'link', LinkViewSet, basename='link')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,3 +33,6 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

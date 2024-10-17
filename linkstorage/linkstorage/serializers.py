@@ -3,6 +3,10 @@ from api.models import Link, Collection
 
 
 class LinkSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+
     class Meta:
         model = Link
         fields = '__all__'

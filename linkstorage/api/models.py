@@ -49,13 +49,16 @@ class Collection(models.Model):
 class Link(models.Model):
     title = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True, null=True)
-    url = models.URLField(unique=True)
+    url = models.URLField()
     image = models.URLField(blank=True, null=True)
     link_type = models.CharField(max_length=50, default='website')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='links')
-    collections = models.ManyToManyField(Collection, related_name='links')
+    collections = models.ManyToManyField(Collection, related_name='links', blank=True)
+
+    class Meta:
+        unique_together = ('user', 'url')
 
     def __str__(self):
         return self.url
