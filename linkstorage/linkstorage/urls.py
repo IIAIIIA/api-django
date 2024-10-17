@@ -19,6 +19,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include, re_path
 from rest_framework.routers import DefaultRouter
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
 
 from api.views import CollectionViewSet, LinkViewSet
 
@@ -26,12 +29,25 @@ router = DefaultRouter()
 router.register(r'collecton', CollectionViewSet, basename='collecton')
 router.register(r'link', LinkViewSet, basename='link')
 
+schema_view = get_schema_view(
+   openapi.Info(
+      title="LinkStorage API",
+      default_version='v1',
+      description="API documentation",
+      terms_of_service="https://www.google.com/policies/terms/",
+      contact=openapi.Contact(email="mealaman@gmail.com"),
+      license=openapi.License(name="BSD License"),
+   ),
+   public=True,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include(router.urls)),
     path('api/v1/auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
-
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
 if settings.DEBUG:

@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from linkstorage.utils import fetch_open_graph_data
 from .models import Link, Collection
 from linkstorage.serializers import CollectionSerializer, LinkSerializer
-
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 class LinkViewSet(viewsets.ModelViewSet):
     serializer_class = LinkSerializer
@@ -43,6 +44,27 @@ class CollectionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return Collection.objects.filter(user=user)
+
+    @swagger_auto_schema(
+        operation_description="Создание новой коллекции",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'name': openapi.Schema(type=openapi.TYPE_STRING, description='Название коллекции', example='favorite'),
+                'description': openapi.Schema(type=openapi.TYPE_STRING, description='Описание коллекции',
+                                              nullable=True, example='my favorite collection'),
+            },
+            required=['name']
+        ),
+        responses={201: CollectionSerializer},
+        manual_parameters=[
+            openapi.Parameter('Authorization', openapi.IN_HEADER, description="Token", type=openapi.TYPE_STRING,
+                              required=True)
+        ]
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
