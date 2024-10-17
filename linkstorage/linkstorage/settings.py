@@ -142,4 +142,18 @@ REST_FRAMEWORK = {
     ],
 }
 
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+    'SERIALIZERS': {},
+}
 
+# EMAIL_HOST = 'smtp.yandex.ru'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = "my_yandex@yandex.by"
+# EMAIL_HOST_PASSWORD = "secret_password"
+# EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_FILE_PATH = '/tmp/app-messages'
