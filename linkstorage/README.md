@@ -6,9 +6,9 @@ To launch the project you need the Docker environment on the host machine instal
 
 1. Clone the repository:
     ```bash
+    git clone https://github.com/IIAIIIA/api-django.git
     cd api-django
     cd linkstorage
-    git clone https://github.com/IIAIIIA/api-django.git
     ```
 
 2. Build a Docker image:
